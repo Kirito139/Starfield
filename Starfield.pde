@@ -1,9 +1,9 @@
 ArrayList <Particle> particles = new ArrayList <Particle>();
 // int[] particles = new int[1000];
 float aimX, aimY; // where the system is aiming
-float bulletSpeed = 15;
+float bulletSpeed = 40;
 float aimSpeed = 0.8; // how fast the aimpoint moves, 1 is instantaneous
-int reloadTime = 1; // frames between shots
+float reloadTime = 5.5; // frames between shots
 int framesSinceLastShot = 0;
 int shotsSinceLastTracer = 0;
 float anchorX, anchorY;
