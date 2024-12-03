@@ -1,7 +1,8 @@
 ArrayList <Particle> particles = new ArrayList <Particle>();
+// int[] particles = new int[1000];
 float aimX, aimY; // where the system is aiming
 float bulletSpeed = 15;
-float aimSpeed = 0.7; // how fast the aimpoint moves, 1 is instantaneous
+float aimSpeed = 0.8; // how fast the aimpoint moves, 1 is instantaneous
 int reloadTime = 1; // frames between shots
 int framesSinceLastShot = 0;
 int shotsSinceLastTracer = 0;
@@ -9,6 +10,8 @@ float anchorX, anchorY;
 PVector prevMousePos;
 PVector avgVelocity = new PVector(0, 0);
 int velocitySampleSize = 20; // number of frames to average velocity over
+float jitterAmount = 4.0; // Adjust this value for more or less jitter
+float jitterX, jitterY;
 
 class Particle {
     float x, y, vx, vy;
@@ -78,7 +81,8 @@ void draw() {
     // calculate average mouse velocity
     PVector mouse = new PVector(mouseX, mouseY);
     PVector mouseVelocity = PVector.sub(mouse, prevMousePos);
-    avgVelocity.lerp(mouseVelocity, 1.0 / velocitySampleSize); // second arg
+    avgVelocity.x += (mouseVelocity.x - avgVelocity.x) * (1.0 / velocitySampleSize);
+    avgVelocity.y += (mouseVelocity.y - avgVelocity.y) * (1.0 / velocitySampleSize);
     // controls how fast the average velocity changes
 
     prevMousePos.set(mouse);
@@ -89,16 +93,19 @@ void draw() {
     float leadX = mouseX + avgVelocity.x * leadTime;
     float leadY = mouseY + avgVelocity.y * leadTime;
 
+
     // calculate aim point coords
     aimX += (leadX - aimX) * aimSpeed;
     aimY += (leadY - aimY) * aimSpeed;
+    aimX += jitterX;
+    aimY += jitterY;
 
     // draw aim line
     stroke(255, 0, 0);
     strokeWeight(1);
     line(anchorX, anchorY, aimX, aimY);
 
-    if (framesSinceLastShot >= reloadTime) {
+    if (framesSinceLastShot >= reloadTime) { // && mousePressed) {
         fire();
         framesSinceLastShot = 0;
     }
@@ -127,9 +134,13 @@ void fire() {
         newOddball.setColor(0, 255, 255);
         particles.add(newOddball);
         shotsSinceLastTracer = 0;
+        jitterX = random(-jitterAmount, jitterAmount);
+        jitterY = random(-jitterAmount, jitterAmount);
     } else {
         Particle newParticle = new Particle(anchorX, anchorY, angle);
         particles.add(newParticle);
         shotsSinceLastTracer++;
+        jitterX = random(-jitterAmount, jitterAmount);
+        jitterY = random(-jitterAmount, jitterAmount);
     }
 }
