@@ -1,9 +1,9 @@
 ArrayList <Particle> particles = new ArrayList <Particle>();
 // int[] particles = new int[1000];
 float aimX, aimY; // where the system is aiming
-float bulletSpeed = 40;
+float bulletSpeed = 50;
 float aimSpeed = 0.8; // how fast the aimpoint moves, 1 is instantaneous
-float reloadTime = 5.5; // frames between shots
+float reloadTime = 2.5; // frames between shots
 int framesSinceLastShot = 0;
 int shotsSinceLastTracer = 0;
 float anchorX, anchorY;
@@ -23,37 +23,41 @@ class Particle {
         this.y = y;
         this.vx = bulletSpeed * cos(angle);
         this.vy = bulletSpeed * sin(angle);
-        this.colo[0] = 255;
-        this.colo[1] = 255;
-        this.colo[2] = 255;
+        this.colo[0] = 55;
+        this.colo[1] = 55;
+        this.colo[2] = 55;
     }
 
     void move() {
         x += vx;
         y += vy;
     }
+
     void show() {
         stroke(colo[0], colo[1], colo[2]);
         strokeWeight(2);
         noFill();
-        line(x, y, x - vx, y - vy); // draw a round
+        line(x, y, x - vx / 2, y - vy / 2);
     }
     // setter for color
     void setColor(int r, int g, int b) {
-        colo[0] = r; colo[1] = g; colo[2] = b;
+        colo[0] = r;
+        colo[1] = g;
+        colo[2] = b;
     }
 
     boolean isOffScreen() {
         return x < 0 || x > width || y < 0 || y > height;
     }
+
     boolean isNearMouse() {
-        return dist(x, y, mouseX, mouseY) < 10; // TODO: adjust radius
-    } // endif
-} // end Particle
+        return dist(x, y, mouseX, mouseY) < 10;
+    }
+}
 
 class Oddball extends Particle {
     Oddball(float x, float y, float angle) {
-        super(x, y, angle); // Call the superclass constructor
+        super(x, y, angle);
     }
 
     @Override
@@ -61,26 +65,26 @@ class Oddball extends Particle {
         stroke(0, 255, 0);
         strokeWeight(2);
         noFill();
-        line(x - vx * 3, y - vy * 3, x, y); // Draw tracer round
+        line(x - vx / 1.5, y - vy / 1.5, x, y); // Draw tracer round
     }
 }
 
 void setup() {
-    frameRate(60);
+    frameRate(120);
     size(960, 540);
     anchorX = 50;
     anchorY = height - 50;
     aimX = anchorX; // initialize aim point to anchor point
     aimY = anchorY;
     prevMousePos = new PVector(mouseX, mouseY);
-} // end setup
+}
 
 void draw() {
     background(0);
 
     // calculate average mouse velocity
     PVector mouse = new PVector(mouseX, mouseY);
-    PVector mouseVelocity = PVector.sub(mouse, prevMousePos);
+    PVector mouseVelocity = new PVector(mouse.x - prevMousePos.x, mouse.y - prevMousePos.y);
     avgVelocity.x += (mouseVelocity.x - avgVelocity.x) * (1.0 / velocitySampleSize);
     avgVelocity.y += (mouseVelocity.y - avgVelocity.y) * (1.0 / velocitySampleSize);
     // controls how fast the average velocity changes
@@ -105,7 +109,7 @@ void draw() {
     strokeWeight(1);
     line(anchorX, anchorY, aimX, aimY);
 
-    if (framesSinceLastShot >= reloadTime) { // && mousePressed) {
+    if (framesSinceLastShot >= reloadTime) {
         fire();
         framesSinceLastShot = 0;
     }
@@ -122,15 +126,16 @@ void draw() {
         }
 
         if (p.isNearMouse()) {
-            p.setColor(20, 20, 20);
+            p.setColor(10, 10, 10);
         }
     }
-} // end draw
+}
 
 void fire() {
     float angle = atan2(aimY - anchorY, aimX - anchorX);
+
     if (shotsSinceLastTracer >= 5) {
-        Particle newOddball = new Oddball(anchorX, anchorY, angle);
+        Oddball newOddball = new Oddball(anchorX, anchorY, angle);
         newOddball.setColor(0, 255, 255);
         particles.add(newOddball);
         shotsSinceLastTracer = 0;
