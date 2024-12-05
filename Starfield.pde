@@ -55,19 +55,19 @@ class Particle {
     }
 }
 
-class Oddball extends Particle {
-    Oddball(float x, float y, float angle) {
-        super(x, y, angle);
-    }
-
-    @Override
-    void show() {
-        stroke(0, 255, 0);
-        strokeWeight(2);
-        noFill();
-        line(x - vx / 1.5, y - vy / 1.5, x, y); // Draw tracer round
-    }
-}
+// class Oddball extends Particle {
+//     Oddball(float x, float y, float angle) {
+//         super(x, y, angle);
+//     }
+// 
+//     @Override
+//     void show() {
+//         stroke(0, 255, 0);
+//         strokeWeight(2);
+//         noFill();
+//         line(x - vx / 1.5, y - vy / 1.5, x, y); // Draw tracer round
+//     }
+// }
 
 void setup() {
     frameRate(120);
