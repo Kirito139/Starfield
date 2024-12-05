@@ -62,7 +62,11 @@ class Oddball extends Particle {
 
     @Override
     void show() {
-        stroke(0, 255, 0);
+        stroke(colo[0], colo[1], colo[2]);
+        strokeWeight(2);
+        noFill();
+        line(x, y, x - vx / 2, y - vy / 2);
+       // stroke(0, 255, 0);
        // strokeWeight(2);
        // noFill();
        // line(x - vx / 1.5, y - vy / 1.5, x, y); // Draw tracer round
