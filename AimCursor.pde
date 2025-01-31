@@ -13,10 +13,10 @@ class AimCursor {
     line(cursorX + 8, cursorY, cursorX + 5, cursorY);
     line(cursorX - 8, cursorY, cursorX - 5, cursorY);
   }
-  public void up() { if ((cursorY - 5) > 0) cursorY -= 15; }
-  public void down() { if ((cursorY + 5) < height) cursorY += 15; }
-  public void left() { if ((cursorX - 5) > 0) cursorX -= 15; }
-  public void right() { if ((cursorX + 5) < width) cursorX += 15; }
+  public void up() { if ((cursorY - 5) > 0) cursorY -= 5; }
+  public void down() { if ((cursorY + 5) < height) cursorY += 5; }
+  public void left() { if ((cursorX - 5) > 0) cursorX -= 5; }
+  public void right() { if ((cursorX + 5) < width) cursorX += 5; }
 
   public float getX() { return cursorX; }
   public float getY() { return cursorY; }
