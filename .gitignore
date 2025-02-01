@@ -8,3 +8,9 @@ build-tmp/
 
 # ignore Processing .swo files
 *.swo
+
+# MacOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
